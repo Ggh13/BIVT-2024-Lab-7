@@ -14,12 +14,18 @@ namespace Lab_7
         {
             static int n = 0;
             static int totalFol = 0;
-            public bool IsExpelled
+
+
+            public override bool IsExpelled
             {
                 get
                 {
+                    if (n > 0)
+                    {
+                        return 0;
+                    }
                     int folFive = 0;
-                    int totalfols = 0;
+                    int avgP = totalFol / (double)n;
                     for (int i = 0; i < penaltyTimes.Length; i++)
                     {
                         totalFol += penaltyTimes[i];
@@ -29,9 +35,9 @@ namespace Lab_7
                             
                         }
                     }
-                    if(totalFol > (totalFol / n) / 10)
+                    if(totalFol > (avgP) * 0.1)
                     {
-                        return false;
+                        return true;
                     }
                     return false;
                 }
@@ -39,29 +45,23 @@ namespace Lab_7
 
             public HockeyPlayer(string name, string surname) : base(name, surname)
             {
-                this.penaltyTimes = new int[0];
-                this.isExpelled = false;
                 n += 1;
 
             }
 
             public virtual void PlayMatch(int time)
             {
+
+                if (time != 0 && time != 2 && time != 5 && time != 10)
+                {
+                    return;
+                }
+
                 if (penaltyTimes == null)
                     return;
 
-                int[] newArray = new int[penaltyTimes.Length + 1];
-
-
-                Array.Copy(penaltyTimes, newArray, penaltyTimes.Length);
-
-                penaltyTimes = newArray;
-                penaltyTimes[penaltyTimes.Length - 1] = time;
+                base.PlayMatch(time);
                 totalFol += time;
-                if (time == 10)
-                {
-                    isExpelled = true;
-                }
             }
         }
         public class BasketballPlayer: Participant
@@ -70,37 +70,23 @@ namespace Lab_7
             {
                 get
                 {
-                    int folFive = 0;
-                    int totalfols = 0;
-                    for(int i = 0; i < penaltyTimes.Length; i++)
-                    {
-                        if (penaltyTimes[i] == 5)
-                        {
-                            folFive++;
-                            totalfols += penaltyTimes[i];
-                        }
-                    }
-                    if(folFive > (penaltyTimes.Length / 10))
-                    {
-                        return true;
-                    }
-                    if(totalfols > penaltyTimes.Length * 2)
-                    {
-                        return true;
-                    }
-                    return false;
+                    int matches = penaltyTimes.Length;
+                    int fouls = penaltyTimes.Sum();
+
+                    return matches > 0 && (penaltyTimes.Count(time => time == 5) > matches * 0.1 || fouls > matches * 2);
                 }
             }
             public BasketballPlayer(string name, string surname): base(name, surname)
             {
-                this.penaltyTimes = new int[0];
-                this.isExpelled = false;
+              
             }
 
-            public virtual void PlayMatch(int time)
+            public virtual void PlayMatch(int fouls)
             {
-                if (penaltyTimes == null)
+                if (fouls < 0 || fouls > 5)
+                {
                     return;
+                }
 
                 int[] newArray = new int[penaltyTimes.Length + 1];
 
@@ -200,20 +186,21 @@ namespace Lab_7
 
             public virtual void PlayMatch(int time)
             {
+                if (time != 0 && time != 2 && time != 5 && time != 10)
+                {
+                    return;
+                }
                 if (penaltyTimes == null)
                     return;
 
                 int[] newArray = new int[penaltyTimes.Length + 1];
 
-               
-                Array.Copy(penaltyTimes, newArray, penaltyTimes.Length);
+
+                penaltyTimes.CopyTo(newArray, 0);
 
                 penaltyTimes = newArray;
                 penaltyTimes[penaltyTimes.Length - 1 ] = time;
-                if(time == 10)
-                {
-                    isExpelled = true;
-                }
+              
             }
 
             public static void Sort(Participant[] array)

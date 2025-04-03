@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Xml.Serialization;
 
-namespace Lab_6
+namespace Lab_7
 {
     public class Blue_2
     {
@@ -95,6 +95,14 @@ namespace Lab_6
                     Array.Resize(ref participants, participants.Length + 1);
                     participants[participants.Length - 1] = newP[i];
                 }
+            }
+
+            public void Add(Participant newP)
+            {
+
+                    Array.Resize(ref participants, participants.Length + 1);
+                    participants[participants.Length - 1] = newP[i];
+                
             }
 
         }

@@ -17,6 +17,8 @@ namespace Lab_7
             private string name;
             private string surname;
             private int place;
+
+
             public void Print()
             {
                 Console.Write("Name: ");
@@ -70,7 +72,11 @@ namespace Lab_7
 
             public void SetPlace(int place)
             {
-                this.place = place;
+                if(this.place == 0)
+                {
+                    this.place = place;
+                }
+                
             }
         }
         public class ManTeam: Team
@@ -82,12 +88,17 @@ namespace Lab_7
             protected override double GetTeamStrength()
             {
                 double sum_Place = 0;
-
+                int count = 0;
                 for(int i = 0; i < Sportsmen.Length; i++)
                 {
                     sum_Place += Sportsmen[i].Place;
+                    count++;
                 }
-                return 100 / (sum_Place /  Sportsmen.Length);
+                if(count == 0)
+                {
+                    return 0;
+                }
+                return 100 / sum_Place /  Sportsmen.Length;
             }
         }
 
@@ -101,11 +112,16 @@ namespace Lab_7
             {
                 double sum_Place = 0;
                 double multiPlace = 1;
-
+                int count = 0;
                 for (int i = 0; i < Sportsmen.Length; i++)
                 {
+                    count += 1;
                     sum_Place += Sportsmen[i].Place;
                     multiPlace = multiPlace * Sportsmen[i].Place; 
+                }
+                if(count == 0)
+                {
+                    return 0;
                 }
                 return 100 * sum_Place *  Sportsmen.Length / multiPlace;
             }
@@ -117,16 +133,21 @@ namespace Lab_7
 
             private string name;
             private Sportsman[] sportsmen;
-
+            public Sportsman[] Sportsmen => this.sportsmen
 
             protected abstract double GetTeamStrength();
+
             public static Team GetChampion(Team[] teams)
             {
+                if(teams == null || teams.Length == 0) { return null; }
+
+
                 if (teams != null)
                 {
                     return null;
                 }
                 Team winner = null;
+                
                 for (int i = 0; i < teams.Length; i++)
                 {
                     if (teams[i].GetTeamStrength() > winner.GetTeamStrength())
@@ -159,15 +180,7 @@ namespace Lab_7
                 }
             }
 
-            public Sportsman[] Sportsmen
-            {
-                get
-                {
-                    if (sportsmen == null)
-                        return null;
-                    return sportsmen;
-                }
-            }
+            
 
 
             public int SummaryScore
@@ -180,6 +193,10 @@ namespace Lab_7
                     int total = 0;
                     foreach (var sportsman in sportsmen)
                     {
+                        if (sportsman == null)
+                        {
+                            continue;
+                        }
                         if (sportsman.Place == 1)
                         {
                             total += 5;
@@ -220,7 +237,7 @@ namespace Lab_7
                     
                     foreach (var sportsman in sportsmen)
                     {
-                        if (sportsman.Place < topPlace)
+                        if (sportsman != null && sportsman.Place > 0 && sportsman.Place < topPlace)
                         {
                             if(sportsman.Place == 0)
                             {
@@ -233,11 +250,12 @@ namespace Lab_7
                 }
             }
 
-
+            private int count;
             public Team(string name)
             {
                 this.name = name;
                 this.sportsmen = new Sportsman[6];
+                this.count = 0;
             }
 
             public void Add(Sportsman sportsman)
