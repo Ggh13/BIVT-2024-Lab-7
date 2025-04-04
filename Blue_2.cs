@@ -101,7 +101,7 @@ namespace Lab_7
             {
 
                     Array.Resize(ref participants, participants.Length + 1);
-                    participants[participants.Length - 1] = newP[i];
+                    participants[participants.Length - 1] = newP;
                 
             }
 

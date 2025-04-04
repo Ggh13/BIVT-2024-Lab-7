@@ -133,7 +133,7 @@ namespace Lab_7
 
             private string name;
             private Sportsman[] sportsmen;
-            public Sportsman[] Sportsmen => this.sportsmen
+            public Sportsman[] Sportsmen => this.sportsmen;
 
             protected abstract double GetTeamStrength();
 

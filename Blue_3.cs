@@ -22,10 +22,10 @@ namespace Lab_7
                 {
                     if (n > 0)
                     {
-                        return 0;
+                        return false;
                     }
                     int folFive = 0;
-                    int avgP = totalFol / (double)n;
+                    double avgP = totalFol / (double)n;
                     for (int i = 0; i < penaltyTimes.Length; i++)
                     {
                         totalFol += penaltyTimes[i];
@@ -94,7 +94,7 @@ namespace Lab_7
                 Array.Copy(penaltyTimes, newArray, penaltyTimes.Length);
 
                 penaltyTimes = newArray;
-                penaltyTimes[penaltyTimes.Length - 1] = time;
+                penaltyTimes[penaltyTimes.Length - 1] = fouls;
              
             }
         }
