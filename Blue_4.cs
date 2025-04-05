@@ -200,7 +200,7 @@ namespace Lab_7
                 SortC(manTeams);
             }
 
-            public static Group MergeC(Team[] group1, Team[] group2, int size)
+            public static Group Merge(Team[] group1, Team[] group2, int size)
             {
                 Group result = new Group("Финалисты");
                 int i = 0; int j = 0;
