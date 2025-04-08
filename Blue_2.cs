@@ -78,7 +78,7 @@ namespace Lab_7
 
             public int Bank => bank;
 
-            public Participant[] Participants { get; set; }
+            public Participant[] Participants => participants
 
             public abstract double[] Prize { get; }
             

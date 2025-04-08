@@ -148,31 +148,10 @@ namespace Lab_7
 
             public void Add(Team[] teams)
             {
-
-                if(teams is WomanTeam)
-                {
-                    if (this.womanTeams == null || teams.Length == 0 || teams == null) return;
-
                     for (int i = 0; i < teams.Length; i++)
                     {
                         Add(teams[i]);
                     }
-                }
-                
-
-            }
-            public void Add(ManTeam[] teams)
-            {
-                if (teams is ManTeam)
-                {
-                    if (this.manTeams == null || teams.Length == 0 || teams == null) return;
-
-                    for (int i = 0; i < teams.Length; i++)
-                    {
-                        Add(teams[i]);
-                    }
-                }
-                
             }
 
 
@@ -200,47 +179,28 @@ namespace Lab_7
                 SortC(manTeams);
             }
 
-
-
-            public static Group Merge(Group group1, Group group2, int size)
+            public static Group MergeC(Team[] group1, Team[] group2, int size)
             {
-                if (group1 == null || group2 == null) return null;
-
                 Group result = new Group("Финалисты");
-
-                Team[] manTeams = MergeC(group1.manTeams, group2.manTeams, size);
-                Team[] womanTeams = MergeC(group1.womanTeams, group2.womanTeams, size);
-
-                result.Add(manTeams);
-                result.Add(womanTeams);
-
-                return result;
-            }
-
-
-            public static Team[] MergeC(Team[] group1, Team[] group2, int size)
-            {
-
                 int i = 0; int j = 0;
-                Team[] result = new Team[size];
                 while (i < size / 2 && j < size / 2)
                 {
                     if (group1[i].TotalScore >= group2[j].TotalScore)
                     {
-                        result[i + j] = group1[i++];
+                        result.Add(group1[i++]);
                     }
                     else
                     {
-                        result[i + j] = group1[i++];
+                        result.Add(group2[j++]);
                     }
                 }
                 while (i < size / 2)
                 {
-                    result[i + j] = group1[i++];
+                    result.Add(group1[i++]);
                 }
                 while (j < size / 2)
                 {
-                    result[i + j] = group1[j++];
+                    result.Add(group2[j++]);
                 }
                 return result;
             }

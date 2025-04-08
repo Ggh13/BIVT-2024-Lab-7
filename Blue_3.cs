@@ -66,7 +66,7 @@ namespace Lab_7
         }
         public class BasketballPlayer: Participant
         {
-            public bool IsExpelled
+            public override bool IsExpelled
             {
                 get
                 {

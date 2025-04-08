@@ -265,7 +265,7 @@ namespace Lab_7
 
                 for (int i = 0; i < sportsmen.Length; i++)
                 {
-                    if (sportsmen[i].Name == null)
+                    if (sportsmen[i] == null)
                     {
                         sportsmen[i] = sportsman;
                         break;
