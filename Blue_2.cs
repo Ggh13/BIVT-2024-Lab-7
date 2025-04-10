@@ -16,22 +16,23 @@ namespace Lab_7
             {
                 get
                 {
-                    if (Participants.Length < 3)
-                        return new double[0];
+                    if (Participants.Length < 3 || Participants == null) return default(double[]);    
 
-                    int topCount = Math.Min(Math.Max(Participants.Length / 2, 3), 10);
-                    double[] prizes = new double[topCount + 3];
+                    double[] prizes = new double[Math.Min(this.Participants.Length, 10)];
 
-
-                    prizes[0] = Bank * 0.4;
+                    prizes[0] = Bank * 0.40;
                     prizes[1] = Bank * 0.25;
                     prizes[2] = Bank * 0.15;
-                    double remain = Bank * 0.2;
-                    double topPrize = remain / topCount;
 
-                    for (int i = 3; i < prizes.Length; i++)
+                    int CountingPas = this.Participants.Length / 2;
+                    int top = Math.Min(Math.Max(CountingPas, 3), 10);
+
+
+                    double nPercent = 20.0 / top;
+
+                    for (int i = 3; i < top; i++)
                     {
-                        prizes[i] = topPrize;
+                        prizes[i] = Bank * nPercent / 100;
                     }
 
                     return prizes;
@@ -52,8 +53,8 @@ namespace Lab_7
             {
                 get
                 {
-                    if (Participants.Length < 3)
-                        return new double[0];
+                    if (Participants.Length <= 3 || this.Participants == null)
+                        return default(double[]);
 
                     double[] prizes = new double[3];
                     prizes[0] = Bank * 0.5;
@@ -90,16 +91,18 @@ namespace Lab_7
             }
             public void Add(Participant[] newP)
             {
+                if (newP == null) return;
+                if (participants == null) return;
+                if (participants.Length == 0) return;
                 for (int i = 0; i < newP.Length; i++)
                 {
-                    Array.Resize(ref participants, participants.Length + 1);
-                    participants[participants.Length - 1] = newP[i];
+                    Add(newP[i]);
                 }
-            }
+            } 
 
             public void Add(Participant newP)
             {
-
+                if (participants == null) return;
                     Array.Resize(ref participants, participants.Length + 1);
                     participants[participants.Length - 1] = newP;
                 

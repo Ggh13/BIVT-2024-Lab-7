@@ -139,23 +139,37 @@ namespace Lab_7
 
             public static Team GetChampion(Team[] teams)
             {
-                if(teams == null || teams.Length == 0) { return null; }
+                if (teams == null || teams.Length == 0) return null;
 
+                Team manChamp = null;
+                Team womanChamp = null;
 
-                if (teams != null)
+                foreach (var team in teams)
                 {
-                    return null;
-                }
-                Team winner = null;
-                
-                for (int i = 0; i < teams.Length; i++)
-                {
-                    if (teams[i].GetTeamStrength() > winner.GetTeamStrength())
+                    if (team is ManTeam)
                     {
-                        winner = teams[i];
+                        if (manChamp == null || team.GetTeamStrength() > manChamp.GetTeamStrength())
+                            manChamp = team;
+                    }
+                    else if (team is WomanTeam)
+                    {
+                        if (womanChamp == null || team.GetTeamStrength() > womanChamp.GetTeamStrength())
+                            womanChamp = team;
                     }
                 }
-                return winner;
+
+                Team resChamp = null;
+                double maxStrength = -999999;
+                foreach (var team in teams)
+                {
+                    if (team.GetTeamStrength() > maxStrength)
+                    {
+                        maxStrength = team.GetTeamStrength();
+                        resChamp = team;
+                    }
+                }
+
+                return resChamp;
 
             }
             public void Print()

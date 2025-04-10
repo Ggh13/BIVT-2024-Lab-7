@@ -18,7 +18,7 @@ namespace Lab_7
                 this.surname = surname;
             }
 
-            public virtual void Print()
+            public override void Print()
             {
                 Console.Write("Name: ");
                 Console.WriteLine(Name);
@@ -30,7 +30,7 @@ namespace Lab_7
                 Console.WriteLine(votes);
             }
 
-            public virtual int CountVotes(HumanResponse[] responses)
+            public override int CountVotes(Response[] responses)
             {
                 if(this.Surname == null || responses == null)
                 {
@@ -76,7 +76,7 @@ namespace Lab_7
                 this.votes = 0;
             }
 
-            public virtual  int CountVotes(Response[] responses)
+            public virtual int CountVotes(Response[] responses)
             {
                 if(this.name == null || responses == null)
                 {

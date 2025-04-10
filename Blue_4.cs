@@ -178,6 +178,7 @@ namespace Lab_7
                 SortC(womanTeams);
                 SortC(manTeams);
             }
+
             public static Group Merge(Group team1, Group team2, int size)
             {
                 Team[] menN = MergeC(team1.manTeams, team2.womanTeams, size);
@@ -189,10 +190,10 @@ namespace Lab_7
                 return res;
 
             }
-            
 
 
-            
+
+
             public static Team[] MergeC(Team[] group1, Team[] group2, int size)
             {
                 Team[] result = new Team[size];
@@ -203,18 +204,18 @@ namespace Lab_7
                     if (group1[i].TotalScore >= group2[j].TotalScore)
                     {
                         result[n] = group1[i++];
-                        n+= 1;
+                        n += 1;
                     }
                     else
                     {
                         result[n] = group2[j++];
-                        n+= 1;
+                        n += 1;
                     }
                 }
                 while (i < size / 2)
                 {
                     result[n] = group1[i++];
-                    n+=1;
+                    n += 1;
                 }
                 while (j < size / 2)
                 {

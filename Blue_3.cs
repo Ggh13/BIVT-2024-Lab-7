@@ -46,16 +46,12 @@ namespace Lab_7
             public HockeyPlayer(string name, string surname) : base(name, surname)
             {
                 n += 1;
+                penaltyTimes = new int[0];
 
             }
 
-            public virtual void PlayMatch(int time)
+            public override void PlayMatch(int time)
             {
-
-                if (time != 0 && time != 2 && time != 5 && time != 10)
-                {
-                    return;
-                }
 
                 if (penaltyTimes == null)
                     return;
@@ -70,31 +66,35 @@ namespace Lab_7
             {
                 get
                 {
-                    int matches = penaltyTimes.Length;
-                    int fouls = penaltyTimes.Sum();
-
-                    return matches > 0 && (penaltyTimes.Count(time => time == 5) > matches * 0.1 || fouls > matches * 2);
+                    if (penaltyTimes == null) return false;
+                    int count = 0;
+                    for (int i = 0; i < penaltyTimes.Length; i++)
+                    {
+                        if (penaltyTimes[i] >= 5) count++;
+                    }
+                    for (int i = 0; i < penaltyTimes.Length; i++)
+                    {
+                        if (this.Total > 2 * penaltyTimes.Length || count > 0.1 * penaltyTimes.Length)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
             }
             public BasketballPlayer(string name, string surname): base(name, surname)
             {
-              
+                penaltyTimes = new int[0];
             }
 
-            public virtual void PlayMatch(int fouls)
+            public override void PlayMatch(int fouls)
             {
-                if (fouls < 0 || fouls > 5)
+                if (penaltyTimes == null || fouls < 0 || fouls > 5)
                 {
                     return;
                 }
 
-                int[] newArray = new int[penaltyTimes.Length + 1];
-
-
-                Array.Copy(penaltyTimes, newArray, penaltyTimes.Length);
-
-                penaltyTimes = newArray;
-                penaltyTimes[penaltyTimes.Length - 1] = fouls;
+               base.PlayMatch(fouls);
              
             }
         }
@@ -171,6 +171,16 @@ namespace Lab_7
             {
                 get
                 {
+                    if (penaltyTimes == null) return false;
+                    bool isExpelled = false;
+                    for (int i = 0; i < penaltyTimes.Length; i++)
+                    {
+                        if (penaltyTimes[i] == 10)
+                        {
+                            isExpelled = true;
+                            break;
+                        }
+                    }
                     return isExpelled;
                 }
             }
@@ -186,10 +196,9 @@ namespace Lab_7
 
             public virtual void PlayMatch(int time)
             {
-                if (time != 0 && time != 2 && time != 5 && time != 10)
-                {
-                    return;
-                }
+                if ((penaltyTimes == null)) return;
+                
+
                 if (penaltyTimes == null)
                     return;
 
