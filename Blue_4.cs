@@ -148,7 +148,11 @@ namespace Lab_7
 
             public void Add(Team[] teams)
             {
-                    for (int i = 0; i < teams.Length; i++)
+                if (teams == null || teams.Length == 0)
+                {
+                    return;
+                }
+                for (int i = 0; i < teams.Length; i++)
                     {
                         Add(teams[i]);
                     }
@@ -175,16 +179,19 @@ namespace Lab_7
             }
             public void Sort()
             {
-                SortC(womanTeams);
                 SortC(manTeams);
+                SortC(womanTeams);
+                
             }
 
             public static Group Merge(Group team1, Group team2, int size)
             {
+                
                 Team[] menN = MergeC(team1.manTeams, team2.womanTeams, size);
                 Team[] womanN = MergeC(team1.manTeams, team2.womanTeams, size);
 
                 Group res = new Group("Финалисты");
+
                 res.Add(menN);
                 res.Add(womanN);
                 return res;
@@ -204,23 +211,23 @@ namespace Lab_7
                     if (group1[i].TotalScore >= group2[j].TotalScore)
                     {
                         result[n] = group1[i++];
-                        n += 1;
+                        n = n + 1;
                     }
                     else
                     {
                         result[n] = group2[j++];
-                        n += 1;
+                        n = n + 1;
                     }
                 }
                 while (i < size / 2)
                 {
                     result[n] = group1[i++];
-                    n += 1;
+                    n = n + 1;
                 }
                 while (j < size / 2)
                 {
                     result[n] = group2[j++];
-                    n += 1;
+                    n = n + 1;
                 }
                 return result;
             }

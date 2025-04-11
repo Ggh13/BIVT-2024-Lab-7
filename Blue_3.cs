@@ -119,25 +119,9 @@ namespace Lab_7
                     Console.Write(" ");
                 }
             }
-            public string Name
-            {
-                get
-                {
-                    if (name == null)
-                        return null;
-                    return name;
-                }
-            }
+            public string Name => name;
 
-            public string Surname
-            {
-                get
-                {
-                    if (surname == null)
-                        return null;
-                    return surname;
-                }
-            }
+            public string Surname => surname;
 
             public int[] Penalties
             {
@@ -191,30 +175,45 @@ namespace Lab_7
                 this.name = name;
                 this.surname = surname;
                 this.penaltyTimes = new int[0];
-                this.isExpelled = false;
             }
 
             public virtual void PlayMatch(int time)
             {
-                if ((penaltyTimes == null)) return;
-                
-
                 if (penaltyTimes == null)
                     return;
 
                 int[] newArray = new int[penaltyTimes.Length + 1];
 
 
-                penaltyTimes.CopyTo(newArray, 0);
+                int[] copy = new int[penaltyTimes.Length + 1];
+                for (int i = 0; i < penaltyTimes.Length; i++)
+                {
+                    copy[i] = penaltyTimes[i];
+                }
+                copy[copy.Length - 1] = time;
+                penaltyTimes = copy;
 
-                penaltyTimes = newArray;
-                penaltyTimes[penaltyTimes.Length - 1 ] = time;
-              
             }
 
-            public static void Sort(Participant[] array)
+            public static void Sort(Participant[] parts)
             {
-                Array.Sort(array, (x, y) => x.Total.CompareTo(y.Total));
+                if (parts == null || parts.Length <= 1)
+                    return;
+
+                int n = parts.Length;
+                for (int i = 0; i < n - 1; i++)
+                {
+                    for (int j = 0; j < n - 1 - i; j++)
+                    {
+                        if (parts[j].Total > parts[j + 1].Total)
+                        {
+                            Participant temp = parts[j];
+                            parts[j] = parts[j + 1];
+                            parts[j + 1] = temp;
+                        }
+                    }
+                    
+                }
             }
         }
     }

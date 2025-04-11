@@ -24,7 +24,7 @@ namespace Lab_7
                     prizes[1] = Bank * 0.25;
                     prizes[2] = Bank * 0.15;
 
-                    int CountingPas = this.Participants.Length / 2;
+                    int CountingPas = Participants.Length / 2;
                     int top = Math.Min(Math.Max(CountingPas, 3), 10);
 
 
@@ -91,9 +91,7 @@ namespace Lab_7
             }
             public void Add(Participant[] newP)
             {
-                if (newP == null) return;
                 if (participants == null) return;
-                if (participants.Length == 0) return;
                 for (int i = 0; i < newP.Length; i++)
                 {
                     Add(newP[i]);
@@ -170,7 +168,7 @@ namespace Lab_7
 
             public void Jump(int[] result)
             {
-                if (this.marks == null || this.marks.GetLength(0) == 0 || this.marks.GetLength(1) == 0 || result == null || result.Length == 0 || this.ind > 1)
+                if (this.marks == null || result == null || this.ind > 1)
                 {
                     return;
                 }
