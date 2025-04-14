@@ -53,7 +53,7 @@ namespace Lab_7
             {
                 get
                 {
-                    if (Participants.Length <= 3 || this.Participants == null)
+                    if (Participants.Length < 3 || this.Participants == null)
                         return default(double[]);
 
                     double[] prizes = new double[3];
@@ -79,7 +79,17 @@ namespace Lab_7
 
             public int Bank => bank;
 
-            public Participant[] Participants => participants;
+            public Participant[] Participants
+            {
+                get
+                {
+                    if(participants == null)
+                    {
+                        return null;
+                    }
+                    return participants;
+                }
+            }
 
             public abstract double[] Prize { get; }
             
@@ -91,7 +101,11 @@ namespace Lab_7
             }
             public void Add(Participant[] newP)
             {
-                if (participants == null) return;
+                if (participants == null)
+                {
+                    this.participants = new Participant[0];
+                }
+
                 for (int i = 0; i < newP.Length; i++)
                 {
                     Add(newP[i]);
@@ -100,9 +114,13 @@ namespace Lab_7
 
             public void Add(Participant newP)
             {
-                if (participants == null) return;
-                    Array.Resize(ref participants, participants.Length + 1);
-                    participants[participants.Length - 1] = newP;
+                if (participants == null)
+                {
+                    this.participants = new Participant[0];
+                }
+
+                Array.Resize(ref participants, participants.Length + 1);
+                participants[participants.Length - 1] = newP;
                 
             }
 

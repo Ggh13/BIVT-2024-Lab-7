@@ -103,13 +103,36 @@ namespace Lab_7
             private int indMan;
             private int indWoMan;
             public string Name => name;
-            public WomanTeam[] WomanTeams => womanTeams;
-            public ManTeam[] ManTeams => manTeams;
+            public WomanTeam[] WomanTeams
+            {
+                get
+                {
+                    if (womanTeams == null)
+                    {
+                        return null;
+                    }
+                    return womanTeams;
+                }
+
+
+            }
+            public ManTeam[] ManTeams {
+                get
+                {
+                    if(manTeams == null)
+                    {
+                        return null;
+                    }
+                    return manTeams;
+                }
+                
+
+            }
             public Group(string name)
             {
                 this.name = name;
-                womanTeams = new WomanTeam[12];
-                manTeams = new ManTeam[12];
+                womanTeams = new WomanTeam[0];
+                manTeams = new ManTeam[0];
                 indMan = 0;
                 indWoMan = 0;
             }
@@ -118,27 +141,33 @@ namespace Lab_7
             {
                 if (manTeams == null)
                 {
-                    return;
+                    manTeams = new ManTeam[0];
                 }
 
-                if (team is ManTeam && indMan < manTeams.Length)
+                if (team is ManTeam && manTeams.Length < 12)
                 {
-                    
-                        manTeams[indMan] = team as ManTeam;
-                        indMan++;
+                    ManTeam[] copy = new ManTeam[manTeams.Length + 1];
+                    Array.Copy(manTeams, copy, manTeams.Length);
+                    manTeams = copy;
+                    manTeams[manTeams.Length-1] = team as ManTeam;
+                        
                     
                 }
 
                 if (womanTeams == null)
                 {
-                    return;
+                    womanTeams = new WomanTeam[0];
                 }
 
-                if (team is WomanTeam && indMan < womanTeams.Length)
+                if (team is WomanTeam && womanTeams.Length < 12)
                 {
 
-                    womanTeams[indWoMan] = team as WomanTeam;
-                    indWoMan++;
+                    WomanTeam[] copy = new WomanTeam[womanTeams.Length + 1];
+                    Array.Copy(womanTeams, copy, womanTeams.Length);
+                    womanTeams = copy;
+                    womanTeams[womanTeams.Length - 1] = team as WomanTeam;
+
+                   
 
                 }
 
@@ -219,6 +248,7 @@ namespace Lab_7
                         n = n + 1;
                     }
                 }
+
                 while (i < size / 2)
                 {
                     result[n] = group1[i++];

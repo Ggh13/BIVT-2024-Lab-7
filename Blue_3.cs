@@ -35,7 +35,8 @@ namespace Lab_7
                             
                         }
                     }
-                    if(totalFol > (avgP) * 0.1)
+
+                    if(totalFol < (avgP) * 0.1)
                     {
                         return true;
                     }
@@ -68,13 +69,15 @@ namespace Lab_7
                 {
                     if (penaltyTimes == null) return false;
                     int count = 0;
+                    int sumTimesFols = 0;
                     for (int i = 0; i < penaltyTimes.Length; i++)
                     {
                         if (penaltyTimes[i] >= 5) count++;
+                        sumTimesFols += penaltyTimes[i];
                     }
                     for (int i = 0; i < penaltyTimes.Length; i++)
                     {
-                        if (this.Total > 2 * penaltyTimes.Length || count > 0.1 * penaltyTimes.Length)
+                        if (games * 2 < sumTimesFols || count > 0.1 * games)
                         {
                             return true;
                         }
@@ -89,9 +92,9 @@ namespace Lab_7
 
             public override void PlayMatch(int fouls)
             {
-                if (penaltyTimes == null || fouls < 0 || fouls > 5)
+                if (penaltyTimes == null )
                 {
-                    return;
+                    this.penaltyTimes = new int[0];
                 }
 
                base.PlayMatch(fouls);
@@ -104,6 +107,8 @@ namespace Lab_7
             private string surname;
             protected int[] penaltyTimes;
             protected bool isExpelled;
+
+            protected int games;
             public void Print()
             {
                 Console.Write("Name: ");
@@ -172,6 +177,7 @@ namespace Lab_7
 
             public Participant(string name, string surname)
             {
+                games = 0;
                 this.name = name;
                 this.surname = surname;
                 this.penaltyTimes = new int[0];
@@ -179,11 +185,11 @@ namespace Lab_7
 
             public virtual void PlayMatch(int time)
             {
+                games += 1;
                 if (penaltyTimes == null)
-                    return;
-
-                int[] newArray = new int[penaltyTimes.Length + 1];
-
+                {
+                    this.penaltyTimes = new int[0];
+                }
 
                 int[] copy = new int[penaltyTimes.Length + 1];
                 for (int i = 0; i < penaltyTimes.Length; i++)
