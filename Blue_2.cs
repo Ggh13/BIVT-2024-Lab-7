@@ -1,245 +1,224 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Permissions;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Security;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Lab_7
 {
     public class Blue_2
     {
-
-
-        public class WaterJump5m : WaterJump
-        {
-           
-               public override double[] Prize
-            {
-                get
-                {
-                    if (Participants.Length < 3 || Participants == null) return default(double[]);    
-
-                    double[] prizes = new double[Math.Min(this.Participants.Length, 10)];
-
-                    prizes[0] = Bank * 0.40;
-                    prizes[1] = Bank * 0.25;
-                    prizes[2] = Bank * 0.15;
-
-                    int CountingPas = Participants.Length / 2;
-                    int top = Math.Min(Math.Max(CountingPas, 3), 10);
-
-
-                    double nPercent = 20.0 / top;
-
-                    for (int i = 3; i < top; i++)
-                    {
-                        prizes[i] = Bank * nPercent / 100;
-                    }
-
-                    return prizes;
-                }
-            }
-
-            public WaterJump5m(string tournamentName, int prizeFund) : base(tournamentName, prizeFund)
-            {
-
-            }
-
-        }
-
-
-        public class WaterJump3m: WaterJump
-        {
-            public override double[] Prize
-            {
-                get
-                {
-                    if (Participants.Length < 3 || this.Participants == null)
-                        return default(double[]);
-
-                    double[] prizes = new double[3];
-                    prizes[0] = Bank * 0.5;
-                    prizes[1] = Bank * 0.3; 
-                    prizes[2] = Bank * 0.2;
-                    return prizes;
-                }
-            }
-        
-        public WaterJump3m(string tournamentName, int prizeFund): base(tournamentName, prizeFund)
-            {
-                
-            }
-
-        }
         public abstract class WaterJump
         {
             private string name;
             private int bank;
             private Participant[] participants;
+
             public string Name => name;
-
             public int Bank => bank;
+            public Participant[] Participants => participants;
 
-            public Participant[] Participants
+            public abstract double[] Prize { get; }
+
+            public WaterJump(string name, int bank)
+            {
+                this.name = name;
+                this.bank = bank;
+                participants = new Participant[0];
+
+            }
+
+            public void Add(Participant participant)
+            {
+                if (participants == null)
+                {
+                    return;
+                }
+                Array.Resize(ref participants, participants.Length + 1);
+                participants[participants.Length - 1] = participant;
+
+            }
+            public void Add(Participant[] participants)
+            {
+                if (this.participants == null)
+                {
+                    return;
+                }
+                for (int i = 0; i < participants.Length; i++)
+                {
+                    Add(participants[i]);
+                }
+            }
+        }
+        public class WaterJump3m : WaterJump
+        {
+            public WaterJump3m(string name, int bank) : base(name, bank)
+            {
+            }
+            public override double[] Prize
             {
                 get
                 {
-                    if(participants == null)
+                    if (Participants == null)
                     {
                         return null;
                     }
-                    return participants;
+                    if (Participants.Length < 3)
+                    {
+                        return null;
+                    }
+                    double[] prize = new double[3];
+                    prize[0] = 0.5 * Bank;
+                    prize[1] = 0.3 * Bank;
+                    prize[2] = 0.2 * Bank;
+                    return prize;
                 }
             }
-
-            public abstract double[] Prize { get; }
-            
-            public WaterJump(string tournamentName, int prizeFund)
+        }
+        public class WaterJump5m : WaterJump
+        {
+            public WaterJump5m(string name, int bank) : base(name, bank)
             {
-                this.name = tournamentName;
-                this.bank = prizeFund;
-                this.participants = new Participant[0];
             }
-            public void Add(Participant[] newP)
+            public override double[] Prize
             {
-                if (participants == null)
+                get
                 {
-                    this.participants = new Participant[0];
-                }
+                    if (Participants == null)
+                    {
+                        return null;
+                    }
+                    if (Participants.Length < 3)
+                    {
+                        return null;
+                    }
+                    int count = Math.Min(10, Participants.Length / 2);
 
-                for (int i = 0; i < newP.Length; i++)
-                {
-                    Add(newP[i]);
-                }
-            } 
+                    double[] prize = new double[count];
+                    double percent = 20.0 / count;
 
-            public void Add(Participant newP)
-            {
-                if (participants == null)
-                {
-                    this.participants = new Participant[0];
+                    for (int i = 0; i < count; i++)
+                    {
+                        prize[i] += percent * Bank / 100;
+                    }
+                    prize[0] += 0.4 * Bank;
+                    prize[1] += 0.25 * Bank;
+                    prize[2] += 0.15 * Bank;
+                    return prize;
                 }
-
-                Array.Resize(ref participants, participants.Length + 1);
-                participants[participants.Length - 1] = newP;
-                
             }
-
         }
         public struct Participant
         {
             private string name;
             private string surname;
             private int[,] marks;
+
             private int ind;
 
-            public string Name => this.name;
-            public string Surname => this.surname;
-
+            public string Name 
+            { 
+                get 
+                { 
+                    return name; 
+                } 
+            }
+            public string Surname 
+            { 
+                get 
+                { 
+                    return surname; 
+                } 
+            }
             public int[,] Marks
             {
                 get
                 {
-                    if (this.marks == null || this.marks.GetLength(0) == 0 || this.marks.GetLength(1) == 0)
+                    if (marks == null)
                     {
                         return null;
                     }
-                    int[,] copy = new int[this.marks.GetLength(0), this.marks.GetLength(1)];
-                    for (int i = 0; i < this.marks.GetLength(0); i++)
+                    int[,] results = new int[marks.GetLength(0), marks.GetLength(1)];
+                    for (int i = 0; i < results.GetLength(0); i++)
                     {
-                        for (int j = 0; j < this.marks.GetLength(1); j++)
+                        for (int j = 0; j < results.GetLength(1); j++)
                         {
-                            copy[i, j] = this.marks[i, j];
+                            results[i, j] = marks[i, j];
                         }
                     }
-                    return copy;
+                    return results;
                 }
             }
-
             public int TotalScore
             {
                 get
                 {
-                    if (this.marks == null || this.marks.GetLength(0) == 0 || this.marks.GetLength(1) == 0)
+                    if (marks == null)
                     {
                         return 0;
                     }
-
                     int sum = 0;
-                    for (int i = 0; i < this.marks.GetLength(0); i++)
+                    for (int i = 0; i < marks.GetLength(0); i++)
                     {
-                        for (int j = 0; j < this.marks.GetLength(1); j++)
+                        for (int j = 0; j < marks.GetLength(1); j++)
                         {
-                            sum += this.marks[i, j];
+                            sum += marks[i, j];
                         }
                     }
                     return sum;
                 }
             }
 
+
             public Participant(string name, string surname)
             {
                 this.name = name;
                 this.surname = surname;
-                this.marks = new int[2, 5];
-                this.ind = 0;
+                marks = new int[2, 5];
+
+                ind = 0;
             }
+
 
             public void Jump(int[] result)
             {
-                if (this.marks == null || result == null || this.ind > 1)
+                if (result == null || marks == null || ind > 1)
                 {
                     return;
                 }
-
-
-                    for (int i = 0; i < 5; i++)
-                    {
-                        this.marks[this.ind, i] = result[i];
-                    }
-                    this.ind++;
-
-
-
+                    for (int j = 0; j < marks.GetLength(1); j++)
+                {
+                    marks[ind, j] = result[j];
                 }
-            
+                ind++;
 
-            public static void Sort(Participant[] array)
+            }
+
+            public static void Sort(Participant[] partics)
             {
-                if (array == null || array.Length == 0)
+                if (partics == null)
                 {
                     return;
                 }
-
-                for (int i = 0; i < array.Length - 1; i++)
+                for (int i = 0; i < partics.Length - 1; i++)
                 {
-                    for (int j = 0; j < array.Length - i - 1; j++)
+                    for (int j = 0; j < partics.Length - i - 1; j++)
                     {
-                        if (array[j + 1].TotalScore > array[j].TotalScore)
+                        if (partics[j].TotalScore < partics[j + 1].TotalScore)
                         {
-                            (array[j + 1], array[j]) = (array[j], array[j + 1]);
+                            (partics[j], partics[j + 1]) = (partics[j + 1], partics[j]);
                         }
                     }
                 }
             }
-
             public void Print()
             {
-                Console.WriteLine(this.name);
-                Console.WriteLine(this.surname);
-
-                if (this.marks != null)
-                {
-                    for (int i = 0; i < this.marks.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < this.marks.GetLength(1); j++)
-                        {
-                            Console.Write(this.marks[i, j]);
-                        }
-                        Console.WriteLine();
-                    }
-                }
-
-                Console.WriteLine(this.TotalScore);
+                Console.Write(Name);
+                Console.Write(" ");
+                Console.Write(Surname);
+                Console.Write(" ");
+                Console.Write(TotalScore);
             }
         }
     }
